@@ -76,7 +76,6 @@ summary(modelResult)
 plot(dataForAnalysis$hp,dataForAnalysis$mpg,main = "MPG Regression by Horse Power",
 abline(modelResult),cex = 1.3,pch = 16,xlab = "Horsepower",ylab = "MPG")
 
-
 ```
 
 
@@ -104,5 +103,9 @@ print(result)
 
 
 
+## Exercise
 
+-   Data assumptions: show data distribution and dsicuss about Normality and Linearity
+-   Perform the linear regression analysis
+-   Model evaluation: discuss model result
 
