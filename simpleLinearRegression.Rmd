@@ -1,0 +1,108 @@
+---
+title: "Simple linear regression"
+output:
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_depth: 3
+    number_sections: false
+    toc_float: 
+       collapsed: true
+    #code_folding: hide
+---
+
+```{=html}
+<style>
+h2 {
+  background-color: #D4DAEC;
+}
+</style>
+```
+
+## Introduction of the methods (recapture the course)
+
+
+-   Motivation
+-   Data assumptions
+-   Perform the linear regression analysis
+-   Model evaluation
+
+
+## Lecture
+
+Short introduction about data and Motivations here.
+
+```{r}
+
+dataForAnalysis=mtcars
+
+```
+
+### Data assumptions
+
+
+**Normality**: dependent variable follows a normal distribution
+
+
+```{r}
+
+hist(dataForAnalysis$mpg)
+
+```
+
+
+**Linearity**: The relationship between the independent and dependent variable must be linear.
+
+```{r}
+
+plot(mpg ~ hp, data = dataForAnalysis)
+
+```
+
+### Perform the linear regression analysis
+
+```{r}
+
+modelResult <- lm(mpg ~ hp, data = dataForAnalysis)
+
+summary(modelResult)
+
+```
+
+### Model evaluation
+
+
+```{r}
+plot(dataForAnalysis$hp,dataForAnalysis$mpg,main = "MPG Regression by Horse Power",
+abline(modelResult),cex = 1.3,pch = 16,xlab = "Horsepower",ylab = "MPG")
+
+
+```
+
+
+```{r}
+
+op=par(mfrow=c(2,2),mar=c(4,4,2,2))
+plot(modelResult)
+
+par(op)
+
+```
+
+
+
+### Predict new data
+
+```{r}
+
+newData <- data.frame(hp = c(NewCar1=110,NewCar2=170))
+result <-  predict(modelResult,newData)
+print(result)
+
+
+```
+
+
+
+
+

@@ -1,0 +1,169 @@
+---
+title: "Simple Tests"
+output:
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_depth: 3
+    number_sections: false
+    toc_float: 
+       collapsed: true
+    #code_folding: hide
+---
+
+```{=html}
+<style>
+h2 {
+  background-color: #D4DAEC;
+}
+</style>
+```
+## Introduction of the methods (recapture the course)
+
+Hypothesis tests and p-values
+
+-   Motivation
+-   one sample influence on means
+-   one sample influence on propotions
+-   two-sample influence on means (independant)
+-   two-sample influence on propotions (independant)
+
+
+## Lecture
+
+Short introduction about data here. 
+
+```{r}
+
+dataForAnalysis=mtcars
+
+```
+
+### one sample influence on means
+
+Short introduction about question. for example, mpg of mtcars data
+
+```{r,echo=TRUE}
+#T stastic caculation
+cohortMean=mean(dataForAnalysis$mpg)
+cohortSD=sd(dataForAnalysis$mpg)
+cohortN=nrow(dataForAnalysis)
+populationMean=20
+
+TValue=(cohortMean-populationMean)/(cohortSD/sqrt(cohortN))
+TValue
+
+```
+
+
+```{r,echo=TRUE}
+#one sample t test
+t.test(dataForAnalysis$mpg,mu=populationMean)
+
+```
+
+
+### one sample influence on propotions
+
+Short introduction about question. for example, proportion of auto transmission cars in mtcars data
+
+```{r,echo=TRUE}
+#T stastic caculation
+targetN=length(which(dataForAnalysis$am==1))
+cohortPropotion=targetN/cohortN
+
+## CI of propotion
+cohortPropotion-1.96*sqrt(cohortPropotion*(1-cohortPropotion)/cohortN)
+cohortPropotion+1.96*sqrt(cohortPropotion*(1-cohortPropotion)/cohortN)
+
+populationPropotion=0.4
+ZValue=(cohortPropotion-populationPropotion)/sqrt(populationPropotion*(1-populationPropotion)/cohortN)
+ZValue
+
+```
+
+
+```{r,echo=TRUE}
+#one propotion Z test
+ztest=prop.test(x = targetN, n = cohortN, p = populationPropotion, correct = FALSE)
+ztest
+sqrt(ztest$statistic)
+
+```
+
+
+### two-sample influence on means (independant)
+
+data summary in two groups
+
+```{r}
+
+tapply(dataForAnalysis$mpg,dataForAnalysis$am,summary)
+
+```
+
+
+T-statistic calculation
+
+```{r}
+
+#T statistic calculation
+meanX=mean(dataForAnalysis$mpg[which(dataForAnalysis$am==0)])
+meanY=mean(dataForAnalysis$mpg[which(dataForAnalysis$am==1)])
+sdX=sd(dataForAnalysis$mpg[which(dataForAnalysis$am==0)])
+sdY=sd(dataForAnalysis$mpg[which(dataForAnalysis$am==1)])
+nX=length(which(dataForAnalysis$am==0))
+nY=length(which(dataForAnalysis$am==1))
+
+TValue=(meanX-meanY)/(sqrt(sdX^2/nX+sdY^2/nY))
+TValue
+
+
+```
+
+two sample t-test
+
+```{r}
+
+t.test(dataForAnalysis$mpg[which(dataForAnalysis$am==0)],dataForAnalysis$mpg[which(dataForAnalysis$am==1)])
+
+```
+
+
+### two-sample influence on propotions (independant)
+
+Short introduction about question. for example, proportion of engine type in automatic vs manual transmission cars in mtcars data
+
+
+```{r}
+
+tapply(dataForAnalysis$vs,dataForAnalysis$am,table)
+tapply(dataForAnalysis$vs,dataForAnalysis$am,summary)
+
+nX1=length(which(dataForAnalysis$am==0 & dataForAnalysis$vs==1))
+nY1=length(which(dataForAnalysis$am==1 & dataForAnalysis$vs==1))
+
+pX=nX1/nX
+pY=nY1/nY
+pTotal=(nX1+nY1)/(nX+nY)
+
+ZValue=(pX-pY)/sqrt(pTotal*(1-pTotal)*(1/nX+1/nY))
+ZValue
+
+```
+
+
+```{r}
+#two propotion Z test
+ztest=prop.test(c(nX1,nX1),c(nX,nY), correct = FALSE)
+ztest
+sqrt(ztest$statistic)
+
+```
+
+
+## Paired tests and non-parametic tests to be added in the same format
+
+
+
+
