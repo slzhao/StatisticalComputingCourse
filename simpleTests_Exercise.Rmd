@@ -47,9 +47,9 @@ dataForAnalysis=titanic3
 
 ### What's the mean age in titanic data? Is it different than 30, which is the median Age of US at 1950
 
-Mean age and SD
+show **Mean and SD of age**
 
-```{r}
+```{r,eval=FALSE,echo=FALSE}
 
 mean(dataForAnalysis$age,na.rm=TRUE)
 sd(dataForAnalysis$age,na.rm=TRUE)
