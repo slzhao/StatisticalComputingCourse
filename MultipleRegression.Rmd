@@ -19,15 +19,19 @@ h2 {
 </style>
 ```
 
+-   Motivation
+-   Data visulization
+-   Perform multiple linear regression analysis
+-   Model interpretation
+-   Model evaluation
+-   Multiple logistic regression
+
+
 ## Introduction of the methods (recapture the course)
 
 **Multiple linear regression** is an extension of simple linear regression used to predict an outcome variable (y) on the basis of multiple distinct predictor variables (x).
 
 
--   Motivation
--   Data assumptions
--   Perform the linear regression analysis
--   Model evaluation
 
 
 ```{r,message=FALSE}
@@ -70,7 +74,7 @@ boxplot(dataForAnalysis$fev~dataForAnalysis$smoke)
 
 ```{r}
 
-modelResult <- lm(fev ~ age+height +sex +smoke   , data = dataForAnalysis)
+modelResult <- glm(fev ~ age+height +sex +smoke   , data = dataForAnalysis, family = "binomial")
 
 
 ```

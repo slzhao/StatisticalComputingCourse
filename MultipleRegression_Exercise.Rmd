@@ -1,5 +1,5 @@
 ---
-title: "simple Logistic Regression"
+title: "Multiple Regression"
 output:
   html_document:
     theme: cerulean
@@ -22,7 +22,7 @@ h2 {
 ---
 ```{r setup,echo=FALSE}
 
-knitr::opts_chunk$set(echo = FALSE,eval=FALSE)
+knitr::opts_chunk$set(echo = FALSE,eval=TRUE)
 
 ```
 
@@ -62,7 +62,9 @@ boxplot(dataForAnalysis$fare~dataForAnalysis$survived)
 ```
 
 
-## Perform multiple logistic regression analysis and show odds ratio of each factor
+## Perform multiple logistic regression analysis 
+
+Perform multiple logistic regression analysis and show odds ratio of each factor
 
 ```{r}
 
@@ -73,6 +75,23 @@ summary(modelResult)
 exp(modelResult$coefficients)
 
 ```
+
+### Model Interpretation
+
+Show p values for each factor. and plot the effects.
+
+```{r}
+
+summary(modelResult)
+confint(modelResult)
+
+library(effects)
+plot(allEffects(modelResult))
+
+
+```
+
+
 
 ### Model evaluation
 
