@@ -249,180 +249,78 @@ h2 {
   background-color: #D4DAEC;
 }
 </style>
-<div id="introduction-of-the-methods-recapture-the-course" class="section level2">
-<h2>Introduction of the methods (recapture the course)</h2>
-<p>Hypothesis tests and p-values</p>
-<ul>
-<li>Motivation</li>
-<li>one sample influence on means</li>
-<li>one sample influence on propotions</li>
-<li>two-sample influence on means (independant)</li>
-<li>two-sample influence on propotions (independant)</li>
-</ul>
-</div>
-<div id="lecture" class="section level2">
-<h2>Lecture</h2>
-<p>Short introduction about data here.</p>
-<pre class="r"><code>dataForAnalysis=mtcars</code></pre>
-<div id="one-sample-influence-on-means" class="section level3">
-<h3>one sample influence on means</h3>
-<p>Short introduction about question. for example, mpg of mtcars data</p>
-<pre class="r"><code>#T stastic caculation
-cohortMean=mean(dataForAnalysis$mpg)
-cohortSD=sd(dataForAnalysis$mpg)
-cohortN=nrow(dataForAnalysis)
-populationMean=20
-
-TValue=(cohortMean-populationMean)/(cohortSD/sqrt(cohortN))
-TValue</code></pre>
-<pre><code>## [1] 0.08506004</code></pre>
-<pre class="r"><code>#one sample t test
-t.test(dataForAnalysis$mpg,mu=populationMean)</code></pre>
-<pre><code>## 
-##  One Sample t-test
-## 
-## data:  dataForAnalysis$mpg
-## t = 0.08506, df = 31, p-value = 0.9328
-## alternative hypothesis: true mean is not equal to 20
-## 95 percent confidence interval:
-##  17.91768 22.26357
-## sample estimates:
-## mean of x 
-##  20.09062</code></pre>
-</div>
-<div id="one-sample-influence-on-propotions" class="section level3">
-<h3>one sample influence on propotions</h3>
-<p>Short introduction about question. for example, proportion of auto transmission cars in mtcars data</p>
-<pre class="r"><code>#T stastic caculation
-targetN=length(which(dataForAnalysis$am==1))
-cohortPropotion=targetN/cohortN
-
-## CI of propotion
-cohortPropotion-1.96*sqrt(cohortPropotion*(1-cohortPropotion)/cohortN)</code></pre>
-<pre><code>## [1] 0.2360813</code></pre>
-<pre class="r"><code>cohortPropotion+1.96*sqrt(cohortPropotion*(1-cohortPropotion)/cohortN)</code></pre>
-<pre><code>## [1] 0.5764187</code></pre>
-<pre class="r"><code>populationPropotion=0.4
-ZValue=(cohortPropotion-populationPropotion)/sqrt(populationPropotion*(1-populationPropotion)/cohortN)
-ZValue</code></pre>
-<pre><code>## [1] 0.07216878</code></pre>
-<pre class="r"><code>#one propotion Z test
-ztest=prop.test(x = targetN, n = cohortN, p = populationPropotion, correct = FALSE)
-ztest</code></pre>
-<pre><code>## 
-##  1-sample proportions test without continuity correction
-## 
-## data:  targetN out of cohortN, null probability populationPropotion
-## X-squared = 0.0052083, df = 1, p-value = 0.9425
-## alternative hypothesis: true p is not equal to 0.4
-## 95 percent confidence interval:
-##  0.2551963 0.5773998
-## sample estimates:
-##       p 
-## 0.40625</code></pre>
-<pre class="r"><code>sqrt(ztest$statistic)</code></pre>
-<pre><code>##  X-squared 
-## 0.07216878</code></pre>
-</div>
-<div id="two-sample-influence-on-means-independant" class="section level3">
-<h3>two-sample influence on means (independant)</h3>
-<p>data summary in two groups</p>
-<pre class="r"><code>tapply(dataForAnalysis$mpg,dataForAnalysis$am,summary)</code></pre>
-<pre><code>## $`0`
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   10.40   14.95   17.30   17.15   19.20   24.40 
-## 
-## $`1`
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   15.00   21.00   22.80   24.39   30.40   33.90</code></pre>
-<p>T-statistic calculation</p>
-<pre class="r"><code>#T statistic calculation
-meanX=mean(dataForAnalysis$mpg[which(dataForAnalysis$am==0)])
-meanY=mean(dataForAnalysis$mpg[which(dataForAnalysis$am==1)])
-sdX=sd(dataForAnalysis$mpg[which(dataForAnalysis$am==0)])
-sdY=sd(dataForAnalysis$mpg[which(dataForAnalysis$am==1)])
-nX=length(which(dataForAnalysis$am==0))
-nY=length(which(dataForAnalysis$am==1))
-
-TValue=(meanX-meanY)/(sqrt(sdX^2/nX+sdY^2/nY))
-TValue</code></pre>
-<pre><code>## [1] -3.767123</code></pre>
-<p>two sample t-test</p>
-<pre class="r"><code>t.test(dataForAnalysis$mpg[which(dataForAnalysis$am==0)],dataForAnalysis$mpg[which(dataForAnalysis$am==1)])</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  dataForAnalysis$mpg[which(dataForAnalysis$am == 0)] and dataForAnalysis$mpg[which(dataForAnalysis$am == 1)]
-## t = -3.7671, df = 18.332, p-value = 0.001374
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -11.280194  -3.209684
-## sample estimates:
-## mean of x mean of y 
-##  17.14737  24.39231</code></pre>
-</div>
-<div id="two-sample-influence-on-propotions-independant" class="section level3">
-<h3>two-sample influence on propotions (independant)</h3>
-<p>Short introduction about question. for example, proportion of engine type in automatic vs manual transmission cars in mtcars data</p>
-<pre class="r"><code>tapply(dataForAnalysis$vs,dataForAnalysis$am,table)</code></pre>
-<pre><code>## $`0`
-## 
-##  0  1 
-## 12  7 
-## 
-## $`1`
-## 
-## 0 1 
-## 6 7</code></pre>
-<pre class="r"><code>tapply(dataForAnalysis$vs,dataForAnalysis$am,summary)</code></pre>
-<pre><code>## $`0`
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##  0.0000  0.0000  0.0000  0.3684  1.0000  1.0000 
-## 
-## $`1`
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##  0.0000  0.0000  1.0000  0.5385  1.0000  1.0000</code></pre>
-<pre class="r"><code>nX1=length(which(dataForAnalysis$am==0 &amp; dataForAnalysis$vs==1))
-nY1=length(which(dataForAnalysis$am==1 &amp; dataForAnalysis$vs==1))
-
-pX=nX1/nX
-pY=nY1/nY
-pTotal=(nX1+nY1)/(nX+nY)
-
-ZValue=(pX-pY)/sqrt(pTotal*(1-pTotal)*(1/nX+1/nY))
-ZValue</code></pre>
-<pre><code>## [1] -0.9523038</code></pre>
-<pre class="r"><code>#two propotion Z test
-ztest=prop.test(c(nX1,nX1),c(nX,nY), correct = FALSE)
-ztest</code></pre>
-<pre><code>## 
-##  2-sample test for equality of proportions without continuity
-##  correction
-## 
-## data:  c(nX1, nX1) out of c(nX, nY)
-## X-squared = 0.90688, df = 1, p-value = 0.3409
-## alternative hypothesis: two.sided
-## 95 percent confidence interval:
-##  -0.517146  0.177065
-## sample estimates:
-##    prop 1    prop 2 
-## 0.3684211 0.5384615</code></pre>
-<pre class="r"><code>sqrt(ztest$statistic)</code></pre>
-<pre><code>## X-squared 
-## 0.9523038</code></pre>
-</div>
-</div>
-<div id="paired-tests-and-non-parametic-tests-to-be-added-in-the-same-format" class="section level2">
-<h2>Paired tests and non-parametic tests to be added in the same format</h2>
-</div>
 <div id="exercise" class="section level2">
 <h2>Exercise</h2>
 <ul>
-<li>one sample influence on means: show mean value and test if it is different than a population mean value</li>
-<li>one sample influence on propotions: show propotion and test if it is different than a population propotion</li>
-<li>two-sample influence on means (independant): show mean value of two groups and test if they are different</li>
-<li>two-sample influence on propotions (independant): show propotion of two groups and test if they are different</li>
+<li><p>Comparing one-sample mean to a standard known mean</p>
+<ul>
+<li>One-Sample T-test (parametric)</li>
+<li>One-Sample Wilcoxon Test (non-parametric)</li>
+</ul></li>
+<li><p>Comparing the means of two independent groups</p>
+<ul>
+<li>Unpaired Two Samples T-test (parametric)</li>
+<li>Unpaired Two-Samples Wilcoxon Test (non-parametric)</li>
+</ul></li>
+<li><p>Comparing the means of paired samples</p>
+<ul>
+<li>Paired Samples T-test (parametric)</li>
+<li>Paired Samples Wilcoxon Test (non-parametric)</li>
+</ul></li>
+<li><p>Comparing the means of more than two groups</p>
+<ul>
+<li>One-Way ANOVA Test (parametric)</li>
+<li>Kruskal-Wallis Test (non parametric)</li>
+</ul></li>
 </ul>
+<pre class="r"><code>#Get Titanic data
+library(Hmisc)
+getHdata(titanic3)
+head(titanic3)
+
+dataForAnalysis=titanic3</code></pre>
+</div>
+<div id="comparing-one-sample-mean-to-a-standard-known-mean" class="section level2">
+<h2>Comparing one-sample mean to a standard known mean</h2>
+<p><strong>Question</strong>: What’s the mean age in titanic data? Is it different than 30?</p>
+<div id="exercise-1-show-mean-and-sd-of-age" class="section level3">
+<h3>Exercise 1: Show <strong>Mean and SD</strong> of age</h3>
+</div>
+<div id="exercise-2-plot-distribution-of-age" class="section level3">
+<h3>Exercise 2: Plot <strong>distribution</strong> of age</h3>
+</div>
+<div id="exercise-3-is-the-mean-age-different-than-30-using-one-sample-t-test" class="section level3">
+<h3>Exercise 3: Is the mean age different than 30, using <strong>one-sample t test</strong></h3>
+</div>
+<div id="exercise-4-is-the-mean-age-different-than-30-using-wilcoxon-rank-sum-test" class="section level3">
+<h3>Exercise 4: Is the mean age different than 30, using <strong>Wilcoxon rank sum test</strong></h3>
+</div>
+</div>
+<div id="comparing-the-means-of-two-independent-groups" class="section level2">
+<h2>Comparing the means of two independent groups</h2>
+<p><strong>Question</strong>: Is there any age difference between suviviors and non-suviviors?</p>
+<div id="exercise-1-testing-by-two-sample-t-test" class="section level3">
+<h3>Exercise 1: Testing by <strong>two-sample t test</strong></h3>
+</div>
+<div id="exercise-2-testing-by-wilcoxon-rank-sum-test" class="section level3">
+<h3>Exercise 2: Testing by <strong>Wilcoxon rank sum test</strong></h3>
+</div>
+</div>
+<div id="comparing-the-means-of-three-or-more-independent-groups" class="section level2">
+<h2>Comparing the means of three or more independent groups</h2>
+<p><strong>Question</strong>: Is there any age difference between people in different ticket class (column name: pclass)?</p>
+<div id="exercise-1-data-visualization-of-age-distribution-by-boxplot" class="section level3">
+<h3>Exercise 1: Data visualization of age distribution by <strong>boxplot</strong></h3>
+</div>
+<div id="exercise-2-testing-by-anova" class="section level3">
+<h3>Exercise 2: Testing by <strong>ANOVA</strong></h3>
+</div>
+<div id="exercise-3-which-two-groups-are-different-by-tukey-multiple-pairwise-comparisons" class="section level3">
+<h3>Exercise 3: Which two groups are different? By <strong>Tukey multiple pairwise-comparisons</strong></h3>
+</div>
+<div id="exercise-4-testing-by-wilcoxon-rank-sum-test" class="section level3">
+<h3>Exercise 4: Testing by <strong>Wilcoxon rank sum test</strong></h3>
+</div>
 </div>
 
 
