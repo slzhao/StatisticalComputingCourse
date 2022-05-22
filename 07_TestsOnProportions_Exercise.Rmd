@@ -1,5 +1,5 @@
 ---
-title: "Simple Tests"
+title: "Tests on proportions"
 output:
   html_document:
     theme: cerulean
@@ -16,8 +16,12 @@ output:
 h2 {
   background-color: #D4DAEC;
 }
+body{
+  font-size: 14pt;
+}
 </style>
 ```
+
 
 
 ```{r setup,echo=FALSE}
@@ -36,7 +40,7 @@ knitr::opts_chunk$set(echo = FALSE,eval=FALSE)
 -   Compare Multiple Observed Proportions to Expected Proportions: Chi-square test
 
 
-```{r,message=FALSE}
+```{r,message=FALSE,echo=TRUE}
 
 #Get Titanic data
 library(Hmisc)

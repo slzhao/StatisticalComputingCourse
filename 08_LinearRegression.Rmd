@@ -16,10 +16,13 @@ output:
 h2 {
   background-color: #D4DAEC;
 }
+body{
+  font-size: 14pt;
+}
 </style>
 ```
 
-## Introduction of the methods (recapture the course)
+## Introduction
 
 
 -   Motivation
@@ -28,15 +31,6 @@ h2 {
 -   Model evaluation
 
 
-## Lecture
-
-Short introduction about data and Motivations here.
-
-```{r}
-
-dataForAnalysis=mtcars
-
-```
 
 ## Prepare data
 
@@ -195,6 +189,18 @@ the estimated regression line equation can be written as follow: fev = -4.448560
 the beta coefficient for the variable age (b1) is 0.061364 It means with age increase in one year, the predicted fev value will increase 0.061364
 
 F-statistic gives the overall significance of the model. It assess whether at least one predictor variable has a non-zero coefficient.
+
+
+### Effects of variables
+
+```{r}
+
+library(effects)
+allEffects(modelResult)
+plot(allEffects(modelResult),axes=list(x=list(rug=FALSE)))
+
+
+```
 
 
 

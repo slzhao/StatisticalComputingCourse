@@ -16,10 +16,14 @@ output:
 h2 {
   background-color: #D4DAEC;
 }
+body{
+  font-size: 14pt;
+}
 </style>
 ```
 
-## Introduction of the methods (recapture the course)
+
+## Introduction
 
 Hypothesis tests and p-values
 
@@ -77,7 +81,7 @@ ZValue
 
 ```
 
-### one propotion Z test
+### one propotion z test
 
 ```{r,echo=TRUE}
 
@@ -123,7 +127,7 @@ ZValue
 
 ```
 
-### Two propotion Z test
+### Two propotion z test
 
 ```{r}
 
@@ -136,12 +140,15 @@ sqrt(ztest$statistic)
 
 ## Compare Multiple Observed Proportions to Expected Proportions: Chi-square test
 
+**Question**: Are the Proportions of transplant tissue types different between male and female?
+
+
 ### Prepare data
 
 **sot-covid** data
 
-**sex**: subject gender (1 = male, 2 = female)
-**smoke**: smoke smoking habits (1 = yes, 2 = no)
+**organ**: Transplant organ type (0 = healthy control, 1 = kidney, 2 =liver, 3 = heart, 4 = lung)
+**male**: smoke smoking habits (1 = male, 2 = female)
 
 
 ```{r}
@@ -152,6 +159,22 @@ dataForAnalysis=read.csv("./data/sot-covid.csv",header=TRUE,row.names=1)
 head(dataForAnalysis)
 
 ```
+
+
+### Chi-square test
+
+```{r}
+#make contingency table
+contingencyTable=as.matrix(table(dataForAnalysis$organ,dataForAnalysis$male))
+
+chisq.test(contingencyTable)
+
+```
+
+
+
+
+
 
 
 

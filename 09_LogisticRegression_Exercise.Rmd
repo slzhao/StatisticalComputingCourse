@@ -1,5 +1,5 @@
 ---
-title: "simple Logistic Regression"
+title: "Logistic Regression"
 output:
   html_document:
     theme: cerulean
@@ -15,6 +15,9 @@ output:
 <style>
 h2 {
   background-color: #D4DAEC;
+}
+body{
+  font-size: 14pt;
 }
 </style>
 ```
@@ -40,7 +43,7 @@ knitr::opts_chunk$set(echo = FALSE,eval=FALSE)
 Goal: association between survival (survived==1) and age (age).
 
 
-```{r,message=FALSE}
+```{r,message=FALSE,echo=TRUE}
 
 #Get Titanic data
 library(Hmisc)
@@ -51,7 +54,7 @@ dataForAnalysis=titanic3
 
 ```
 
-*Question*: Is survival (survived==1) associated with age, sex and ticket fare (fare)?
+**Question**: Is survival (survived==1) associated with age, sex and ticket fare (fare)?
 
 ### Exercise 1: Data visulization for survival, age, sex and fare
 
@@ -70,7 +73,7 @@ boxplot(dataForAnalysis$fare~dataForAnalysis$survived)
 ```
 
 
-## Exercise 2: Perform logistic regression analysis
+### Exercise 2: Perform logistic regression analysis
 
 survived ~ age+fare+sex
 
@@ -95,7 +98,7 @@ confint(modelResult)
 ### Exercise 4: Report Odds ratio for each variable
 
 
-```{r,echo=TRUE,eval=TRUE}
+```{r}
 
 #Odds ratio
 exp(modelResult$coefficients)

@@ -1,5 +1,5 @@
 ---
-title: "Simple Tests"
+title: "Tests on mean values"
 output:
   html_document:
     theme: cerulean
@@ -16,8 +16,12 @@ output:
 h2 {
   background-color: #D4DAEC;
 }
+body{
+  font-size: 14pt;
+}
 </style>
 ```
+
 
 
 ```{r setup,echo=FALSE}
@@ -26,7 +30,6 @@ knitr::opts_chunk$set(echo = FALSE,eval=FALSE)
 
 
 ```
-
 
 
 
@@ -51,6 +54,8 @@ knitr::opts_chunk$set(echo = FALSE,eval=FALSE)
 
     -   One-Way ANOVA Test (parametric)
     -   Kruskal-Wallis Test (non parametric)
+
+## Prepare data
 
 ```{r,message=FALSE,echo=TRUE}
 
@@ -108,7 +113,7 @@ wilcox.test(dataForAnalysis$age,30)
 **Question**: Is there any age difference between suviviors and non-suviviors?
 
 
-### Exercise 1: Testing by **two-sample t test**
+### Exercise 1: Testing by **two-sample t-test**
 
 ```{r}
 

@@ -19,37 +19,41 @@ editor_options:
 h2 {
   background-color: #D4DAEC;
 }
+body{
+  font-size: 14pt;
+}
 </style>
 ```
-## Introduction of the methods (recapture the course)
+
+## Introduction
 
 Hypothesis tests and p-values
 
 -   Motivation
 
--   Comparing one-sample mean to a standard known mean:
+-   Comparing **one-sample mean** to a standard known mean:
 
     -   One-Sample T-test (parametric)
     -   One-Sample Wilcoxon Test (non-parametric)
 
--   Comparing the means of two independent groups
+-   Comparing the **means of two independent groups**
 
     -   Unpaired Two Samples T-test (parametric)
     -   Unpaired Two-Samples Wilcoxon Test (non-parametric)
 
--   Comparing the means of paired samples
+-   Comparing the **means of paired samples**
 
     -   Paired Samples T-test (parametric)
     -   Paired Samples Wilcoxon Test (non-parametric)
 
--   Comparing the means of more than two groups
+-   Comparing the **means of more than two groups**
 
     -   One-Way ANOVA Test (parametric)
     -   Kruskal-Wallis Test (non parametric)
 
 ## Prepare data
 
-**fev** data:
+### **fev** data:
 
 smoking tends to impair lung function arises from studies of pulmonary
 function in adults who are long-time smokers. A question then arises as
@@ -72,7 +76,7 @@ head(dataForAnalysis)
 
 ## Comparing one-sample mean to a standard known mean
 
-Is the mean value of age in this data different than 10?
+**Question**: Is the mean value of age in this data different than 10?
 
 ### Data distribution to decide which test to use
 
@@ -87,7 +91,7 @@ hist(dataForAnalysis$age)
 
 ### One-Sample T-test (parametric)
 
-```{r,echo=TRUE}
+```{r}
 #T stastic caculation
 cohortMean=mean(dataForAnalysis$age)
 cohortSD=sd(dataForAnalysis$age)
@@ -99,7 +103,7 @@ TValue
 
 ```
 
-```{r,echo=TRUE}
+```{r}
 #one sample t test
 t.test(dataForAnalysis$age,mu=populationMean)
 
@@ -108,12 +112,16 @@ t.test(dataForAnalysis$age,mu=populationMean)
 The result of t.test() function is a list containing the following
 components:
 
-statistic: the value of the t test statistics parameter: the degrees of
-freedom for the t test statistics p.value: the p-value for the test
-conf.int: a confidence interval for the mean appropriate to the
-specified alternative hypothesis. estimate: the means of the two groups
-being compared (in the case of independent t test) or difference in
-means (in the case of paired t test).
+-   statistic: the value of the t test statistics
+
+-   p.value: the p-value for the test
+
+-   conf.int: a confidence interval for the mean appropriate to the
+    specified alternative hypothesis.
+
+-   estimate: the means of the two groups being compared (in the case of
+    independent t test) or difference in means (in the case of paired t
+    test).
 
 ### One-Sample Wilcoxon Test (non-parametric)
 
@@ -125,7 +133,8 @@ wilcox.test(dataForAnalysis$age, mu = populationMean)
 
 ## Comparing the means of two independent groups
 
-Is the mean value of fev between smokers and non-smokers different?
+**Question**: Is the mean value of fev between smokers and non-smokers
+different?
 
 ### Data distribution and summary to decide which test to use
 
@@ -167,7 +176,7 @@ two sample t-test
 
 ```{r}
 
-t.test(dataX,dataY)
+t.test(dataX,dataY,alternative = "two.sided",paired = FALSE)
 
 ```
 
@@ -182,6 +191,10 @@ wilcox.test(dataX,dataY)
 
 ## Comparing the means of paired samples
 
+## Prepare data
+
+### **sot-covid** data:
+
 The goal of this study was to compare humoral responses to a SARS-CoV-2
 vaccine series between solid organ transplant (SOT) recipients and
 healthy controls (HCs).
@@ -195,9 +208,8 @@ head(dataForAnalysis)
 
 ```
 
-Let's compare the RBD value bewteen Baseline and three weeks following
-first vaccine dose: *rbd1* ELISA response to RBD at baseline *rbd2*
-ELISA response to RBD three weeks following first vaccine dose
+Let's compare the RBD value between Baseline (rbd1) and three weeks
+following first vaccine dose (rbd2*)*.
 
 ### Paired Samples t-test (parametric)
 
@@ -259,8 +271,12 @@ wilcox.test(dataForAnalysis$rbd1,dataForAnalysis$rbd2,paired = TRUE)
 The ANOVA test assumes that, the data are normally distributed and the
 variance across groups are homogeneous.
 
-***organ:*** organ type (0 = healthy control, 1 = kidney, 2 = liver, 3 =
-heart, 4 = lung).
+Let's compare the Baseline RBD values (rbd1) between different groups of
+tissue transplant patients, as well as three weeks following first
+vaccine dose (rbd2).
+
+***organ:*** Transplant organ type (0 = healthy control, 1 = kidney, 2 =
+liver, 3 = heart, 4 = lung).
 
 ### Data visualization
 
@@ -293,8 +309,7 @@ summary(anovaResult2)
 
 ```{r}
 
-TukeyHSD(anovaResult1)
-
+#TukeyHSD(anovaResult1)
 TukeyHSD(anovaResult2)
 
 ```
@@ -315,10 +330,10 @@ kruskal.test(rbd2 ~ organ, data = dataForAnalysis)
 
 ```
 
-```{r}
+```{r,warning=FALSE}
 
-pairwise.wilcox.test(dataForAnalysis$rbd1 , dataForAnalysis$organ,
-                 p.adjust.method = "BH")
+#pairwise.wilcox.test(dataForAnalysis$rbd1 , dataForAnalysis$organ,
+#                 p.adjust.method = "BH")
 
 pairwise.wilcox.test(dataForAnalysis$rbd2 , dataForAnalysis$organ,
                  p.adjust.method = "BH")

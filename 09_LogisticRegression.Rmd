@@ -16,10 +16,14 @@ output:
 h2 {
   background-color: #D4DAEC;
 }
+body{
+  font-size: 14pt;
+}
 </style>
 ```
 
-## Introduction of the methods (recapture the course)
+
+## Introduction
 
 -   Motivation
 -   Data overview
@@ -32,6 +36,7 @@ h2 {
 **fev** data: Smoking tends to impair lung function. Data in children who smoke.
 
 **age**: subject age
+
 **smoke**: smoke smoking habits (1 = yes, 2 = no)
 
 ```{r}

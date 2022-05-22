@@ -37,7 +37,7 @@ knitr::opts_chunk$set(echo = FALSE,eval=FALSE)
 
 ## Data
 
-```{r,echo=TRUE,eval=TRUE}
+```{r,echo=TRUE}
 
 #load data
 dataForAnalysis=read.csv("./data/sot-covid.csv",header=TRUE,row.names=1)
@@ -47,7 +47,7 @@ head(dataForAnalysis)
 
 ```
 
-*Question*: Is RBD at three weeks (rbd2) associated with basedline RBD (rbd1) and other factors including organ and age?
+**Question**: Is RBD at three weeks (rbd2) associated with basedline RBD (rbd1) and other factors including organ and age?
 
 ### Exercise 1: Data visulization for  rbd2, rbd1, age, and organ
 
