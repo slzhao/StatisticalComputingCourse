@@ -41,7 +41,8 @@ body{
 
 ```{r}
 
-dataForAnalysis=read.csv("./data/fev.csv",header=TRUE,row.names=1)
+#dataForAnalysis=read.csv("./data/fev.csv",header=TRUE,row.names=1)
+dataForAnalysis <- read.csv("https://raw.githubusercontent.com/couthcommander/sip_computing/main/labs/fev.csv",header=TRUE,row.names=1)
 dataForAnalysis$sex=ifelse(dataForAnalysis$sex==1,"male","female")
 dataForAnalysis$smoke=ifelse(dataForAnalysis$smoke==1,"yes","no")
 
