@@ -48,24 +48,24 @@ head(dataForAnalysis)
 
 ```
 
-**Question**: Is RBD at three weeks (rbd2) associated with basedline RBD (rbd1) and other factors including organ and age?
+**Question**: Is ECD at three weeks (ecd2) associated with basedline ECD (ecd1) and other factors including organ and age?
 
-### Exercise 1: Data visulization for rbd2, rbd1, age, and organ
+### Exercise 1: Data visulization for ecd2, ecd1, age, and organ
 
 ```{r}
 
-plot(dataForAnalysis[,c("rbd2","rbd1","age")])
+plot(dataForAnalysis[,c("ecd2","ecd1","age")])
 
-boxplot(dataForAnalysis$rbd2~dataForAnalysis$organ)
+boxplot(dataForAnalysis$ecd2~dataForAnalysis$organ)
 
 ```
 
 
-### Exercise 2: Perform the linear regression analysis, rbd2~rbd1+age+organ
+### Exercise 2: Perform the linear regression analysis, ecd2~ecd1+age+organ
 
 ```{r}
 
-modelResult <- lm(rbd2 ~ rbd1+age+organ, data = dataForAnalysis)
+modelResult <- lm(ecd2~ecd1+age+organ, data = dataForAnalysis)
 
 ```
 
@@ -80,16 +80,6 @@ confint(modelResult)
 ```
 
 
-
-### Exercise 4: USe the model to predict the rbd2 value for a new subject.
-
-
-```{r}
-
-newData <- data.frame(age = c(Subject1=3,Subject2=4),rbd1=c(0.426,0.153),organ=factor(c(1,2)))
-predict(modelResult,newdata = newData)
-
-```
 
 
 

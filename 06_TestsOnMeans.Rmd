@@ -84,7 +84,7 @@ head(dataForAnalysis)
 
 ### Data distribution to decide which test to use
 
-Usually If the sample size is large enough (n \> 30), we can ignore the
+Usually If the sample size is large enough, we can ignore the
 distribution of the data and use parametric tests.
 
 ```{r}

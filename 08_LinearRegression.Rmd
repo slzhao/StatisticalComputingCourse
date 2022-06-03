@@ -111,6 +111,8 @@ The adjusted R-squared adjusts for the degrees of freedom.
 
 ### Model evaluation
 
+#### Confidence interval of Coefficients
+
 ```{r}
 
 confint(modelResult)
@@ -119,21 +121,24 @@ confint(modelResult)
 
 The standard error measures the variability/accuracy of the beta coefficients. It can be used to compute the confidence intervals of the coefficients. There is approximately a 95% chance that the interval [0.2072777, 0.2368043] will contain the true value of b1.
 
+#### Visulization of the fitted line
 
 ```{r}
+
 plot(dataForAnalysis$age,dataForAnalysis$fev,main = "FEV Regression by Age")
 abline(modelResult,cex = 1.3,pch = 16,xlab = "FEV",ylab = "Age")
-
 
 ```
 
 
+#### Residuals distribution
+
 ```{r}
 
-op=par(mfrow=c(2,2),mar=c(4,4,2,2))
-plot(modelResult)
+plot(modelResult$fitted.values,modelResult$residuals,xlab="Fitted Values",ylab="Residuals")
 
-par(op)
+qqnorm(scale(modelResult$residuals))
+abline(0,1,lty=2,col="red")
 
 ```
 
@@ -155,7 +160,7 @@ predict(modelResult,newData)
 
 Multiple linear regression is an extension of simple linear regression used to predict an outcome based on multiple predictors.
 
-**Question**: Does age, height, and sex associated with fev (lung function )?
+**Question**: Are age and smoking associated with fev (lung function)?
 
 
 ### Data visulization
@@ -163,9 +168,9 @@ Multiple linear regression is an extension of simple linear regression used to p
 
 ```{r}
 
-plot(dataForAnalysis[,c("fev","age","height")])
+boxplot(dataForAnalysis$fev~dataForAnalysis$smoke)
 
-boxplot(dataForAnalysis$fev~dataForAnalysis$sex)
+boxplot(dataForAnalysis$age~dataForAnalysis$smoke)
 
 ```
 
@@ -175,7 +180,7 @@ boxplot(dataForAnalysis$fev~dataForAnalysis$sex)
 
 ```{r}
 
-modelResult <- lm(fev ~ age+height+sex, data = dataForAnalysis)
+modelResult <- lm(fev ~ age+smoke, data = dataForAnalysis)
 
 summary(modelResult)
 confint(modelResult)
@@ -185,9 +190,11 @@ confint(modelResult)
 
 Model Interpretation:
 
-the estimated regression line equation can be written as follow: fev = -4.448560 + 0.061364* age+ 0.104560 * height+0.161112*Sex(Male)
+the estimated regression line equation can be written as follow: fev = 0.367373 + 0.230605* age-0.208995*Smoke(Yes)
 
-the beta coefficient for the variable age (b1) is 0.061364 It means with age increase in one year, the predicted fev value will increase 0.061364
+the beta coefficient for the variable age (b1) is 0.230605. It means with age increase in one year, the predicted fev value will increase 0.230605
+
+the beta coefficient for the variable smoke (b2) is -0.208995. It means the predicted fev value will be smaller (-0.208995) in smokers.
 
 F-statistic gives the overall significance of the model. It assess whether at least one predictor variable has a non-zero coefficient.
 
@@ -197,23 +204,12 @@ F-statistic gives the overall significance of the model. It assess whether at le
 ```{r}
 
 library(effects)
-allEffects(modelResult)
-plot(allEffects(modelResult),axes=list(x=list(rug=FALSE)))
+plot(allEffects(modelResult))
 
 
 ```
 
 
-
-### Predict new data
-
-```{r}
-
-newData <- data.frame(age = c(Subject1=3,Subject2=4),height=c(57,67),sex=c("male","female"))
-predict(modelResult,newData)
-
-
-```
 
 
 

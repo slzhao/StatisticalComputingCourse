@@ -1,0 +1,331 @@
+---
+title: "Tests on mean values"
+output:
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_depth: 3
+    number_sections: no
+    toc_float:
+      collapsed: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{=html}
+<style>
+h2 {
+  background-color: #D4DAEC;
+}
+body{
+  font-size: 14pt;
+}
+</style>
+```
+
+## Introduction
+
+Hypothesis tests and p-values
+
+-   Motivation
+ 
+    -   Population mean and sample mean
+    -   Understand the question
+    -   Explore the data
+
+-   Comparing **one-sample mean** to a known mean:
+ 
+    -   One-sample t-test (parametric)
+    -   One-sample Wilcoxon test (non-parametric)
+
+-   Comparing the **means of two independent groups**
+
+    -   Unpaired two samples t-test (parametric)
+    -   Unpaired two-samples Wilcoxon test (non-parametric)
+
+-   Comparing the **means of paired samples**
+
+    -   Paired samples t-test (parametric)
+    -   Paired samples Wilcoxon test (non-parametric)
+
+-   Comparing the **means of more than two groups**
+
+    -   One-way ANOVA test (parametric)
+    -   Kruskal-Wallis test (non parametric)
+
+## Data example 1
+Studies of pulmonary function in adults who are long-time smokers have shown that smoking tends to impair lung function. A question then arises as to whether similar effects can be detected in children who smoke. We will use  **fev** data that include measures of lung function, forced expiratory volume (FEV), which were collected from 654 children seen for a routine checkup in a pediatric clinic. The study subjects were asked whether they were current smokers. FEV measures the volume of air you can blow out of your lungs.
+
+```{r, message = FALSE}
+library(Hmisc)
+#fev=read.csv("./data/fev.csv",header=TRUE,row.names=1)
+fev <- read.csv("https://raw.githubusercontent.com/couthcommander/sip_computing/main/labs/fev.csv",header=TRUE,row.names=1)
+label(fev$age) <- 'subject age at time of measurement (years)'
+label(fev$fev) <- 'measured FEV (liters per second)'
+label(fev$height) <- 'subject height at time of measurement (inches)'
+label(fev$sex) <- 'sex (1 = male, 2 = female)'
+label(fev$smoke) <- 'smoker (1 = smoker, 2 = non-smoker)'
+head(fev)
+html(describe(fev))
+
+```
+
+## Comparing one-sample mean to a known mean
+
+**Question**: Is the mean value of age in this data different from 10?
+
+### Check data distribution to decide which test to use
+
+```{r}
+
+hist(fev$age, main="", xlab="Age")
+abline(v=10, lty=2, col="red")
+
+```
+
+### One-sample t-test (parametric)
+
+```{r}
+#T stastic caculation
+cohortMean=mean(fev$age)
+cohortSD=sd(fev$age)
+cohortN=nrow(fev)
+populationMean=10
+
+TValue=(cohortMean-populationMean)/(cohortSD/sqrt(cohortN))
+TValue
+
+```
+
+```{r}
+#one sample t test
+t.test(fev$age, mu=populationMean)
+
+```
+
+The output of t.test() function is a list containing the following
+components:
+
+-   statistic: the value of the t-statistic
+
+-   p.value: the p-value for the test
+
+-   conf.int: a confidence interval for the mean appropriate to the
+    specified alternative hypothesis.
+
+-   estimate: the estimated mean for one-sample test or difference in means for the two groups being compared (in the case of two-sample t-test).
+
+### One-sample Wilcoxon test (non-parametric)
+
+```{r}
+
+wilcox.test(fev$age, mu = populationMean)
+
+```
+
+## Comparing the means of two independent groups
+
+**Question**: Is the mean value of fev between smokers and non-smokers
+different?
+
+### Check data distribution to decide which test to use
+
+```{r}
+
+hist(fev$fev[which(fev$smoke==1)], main="Smokers", xlab="FEV")
+hist(fev$fev[which(fev$smoke==2)], main="Non-smokers", xlab="FEV")
+boxplot(fev$fev~fev$smoke, main="", ylab="FEV", xlab="Smoker")
+
+tapply(fev$fev, fev$smoke,summary)
+
+```
+
+### Two-sample t-test (parametric)
+
+T-statistic calculation
+
+```{r}
+
+#T statistic calculation
+dataX=(fev$fev[which(fev$smoke==1)])
+dataY=(fev$fev[which(fev$smoke==2)])
+
+meanX=mean(dataX)
+meanY=mean(dataY)
+sdX=sd(dataX)
+sdY=sd(dataY)
+nX=length(dataX)
+nY=length(dataY)
+
+TValue=(meanX-meanY)/(sqrt(sdX^2/nX+sdY^2/nY))
+TValue
+
+```
+
+Two-sample t-test
+
+```{r}
+
+t.test(dataX, dataY, alternative = "two.sided", paired = FALSE)
+
+```
+
+### Wilcoxon rank sum test (non-parametric): 
+
+Wilcoxon rank sum test is a non-parametric test for means of independent two samples.
+
+```{r}
+
+wilcox.test(dataX,dataY)
+
+```
+
+## Data example 2
+
+We will use the **sot-covid** data used in "01_introduction". The goal of this study was to compare humoral and cellular immune responses to two doses of the SARS-CoV-2 mRNA vaccine between solid organ transplant (SOT) recipients and healthy controls (HCs). See "01_introduction" for the details of this data.
+
+```{r}
+
+#load data
+dataForAnalysis=read.csv("https://raw.githubusercontent.com/couthcommander/sip_computing/main/labs/sot-covid.csv",header=TRUE,row.names=1)
+
+head(dataForAnalysis)
+
+```
+
+## Comparing the mean of paired samples
+
+Let's compare Immunoglobulin G (IgG) to SARS-CoV-2 spike receptor-binding domain (RBD) values between the baseline (`rbd1`) and three weeks following first vaccine dose (`rbd2`).
+
+### Paired t-test (parametric)
+
+Data summary for changes in RBD between the baseline and three weeks following
+first vaccine dose
+
+```{r}
+
+summary(dataForAnalysis$rbd2-dataForAnalysis$rbd1)
+
+hist(dataForAnalysis$rbd2-dataForAnalysis$rbd1, main="", xlab="Changes in RBD between the baseline and 3-weeks follow-up")
+
+plot(dataForAnalysis$rbd1, dataForAnalysis$rbd2, main="", xlab="RBD at baseline", ylab="RBD at follow-up")
+abline(0, 1, lty=2, col="red")
+
+```
+
+T-statistic calculation on "difference"
+
+```{r,echo=TRUE}
+#T stastic caculation
+diffValue=dataForAnalysis$rbd1-dataForAnalysis$rbd2
+
+cohortMean=mean(diffValue)
+cohortSD=sd(diffValue)
+cohortN=length(diffValue)
+populationMean=0
+
+TValue=(cohortMean-populationMean)/(cohortSD/sqrt(cohortN))
+TValue
+
+```
+
+Paired t-test
+
+```{r}
+
+t.test(dataForAnalysis$rbd1, dataForAnalysis$rbd2, paired = TRUE)
+
+```
+
+You will get same results by one sample t-test to compare the difference
+with mean=0
+
+```{r}
+
+t.test(dataForAnalysis$rbd1-dataForAnalysis$rbd2, mu=0)
+
+```
+
+### Wilcoxon signed rank test (non-parametric)
+
+Wilcoxon signed rank test is a non-parametric test for the mean of paired two samples.
+
+```{r}
+
+wilcox.test(dataForAnalysis$rbd1, dataForAnalysis$rbd2, paired = TRUE)
+
+
+```
+
+## Analysis of Variance (ANOVA): testing means for three or more samples
+
+The ANOVA test assumes that the data are normally distributed and the
+variance across groups are homogeneous.
+
+Let's compare the baseline RBD values (`rbd1`) between different groups of organ transplant patients, as well as three weeks following first vaccine dose (`rbd2`).
+
+***organ:*** Transplant organ type (0 = healthy control, 1 = kidney, 2 =
+liver, 3 = heart, 4 = lung).
+
+### Data visualization
+
+```{r}
+boxplot(rbd1 ~ organ, data = dataForAnalysis, main="", xlab="Transplant organ type", ylab="RBD at the baseline")
+
+boxplot(rbd2 ~ organ, data = dataForAnalysis, main="", xlab="Transplant organ type", ylab="RBD at the 3-weeks follow-up")
+
+hist(dataForAnalysis$rbd1, main="", xlab="RBD at the baseline")
+hist(dataForAnalysis$rbd2, main="", xlab="RBD at the 3-weeks follow-up")
+
+```
+
+### One-way ANOVA
+
+```{r}
+
+dataForAnalysis$organ= factor(dataForAnalysis$organ)
+
+#difference of baseline rbd between organ types
+anovaResult1 <- aov(rbd1 ~ organ, data = dataForAnalysis)
+summary(anovaResult1)
+
+#difference of rbd at three weeks following first vaccine dose between organ types
+anovaResult2 <- aov(rbd2 ~ organ, data = dataForAnalysis)
+summary(anovaResult2)
+
+
+```
+
+### Tukey multiple pairwise-comparisons
+
+```{r}
+
+#TukeyHSD(anovaResult1)
+TukeyHSD(anovaResult2)
+
+```
+
+### Kruskal-Wallis test
+
+Kruskal-Wallis test is a non-parametric alternative to one-way ANOVA test, which extends Wilcoxon test rank sum test when there are more than two groups.
+
+```{r}
+#baselilne rbd
+kruskal.test(rbd1 ~ organ, data = dataForAnalysis)
+
+#rbd at three weeks following first vaccine dose
+kruskal.test(rbd2 ~ organ, data = dataForAnalysis)
+
+
+```
+
+```{r,warning=FALSE}
+
+pairwise.wilcox.test(dataForAnalysis$rbd2 , dataForAnalysis$organ,
+                 p.adjust.method = "BH")
+
+```
