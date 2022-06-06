@@ -1,0 +1,138 @@
+---
+title: "Linear regression"
+output:
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_depth: 3
+    number_sections: false
+    toc_float: 
+       collapsed: true
+    #code_folding: hide
+---
+
+```{=html}
+<style>
+h2 {
+  background-color: #D4DAEC;
+}
+</style>
+```
+
+```{r setup,echo=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE,eval=TRUE)
+
+```
+
+
+
+## Exercise
+
+-   Data assumptions: show data distribution and discuss about Normality and Linearity
+-   Perform the linear regression analysis
+-   Model evaluation: discuss model result
+
+
+## Data
+
+https://hbiostat.org/data/repo/diabetes.html
+
+The data consist of 19 variables on 403 subjects from 1046 subjects who were interviewed in a study to understand the prevalence of obesity, diabetes, and other cardiovascular risk factors in central Virginia for African Americans. According to Dr John Hong, Diabetes Mellitus Type II (adult onset diabetes) is associated most strongly with obesity. The waist/hip ratio may be a predictor in diabetes and heart disease. DM II is also associated with hypertension - they may both be part of "Syndrome X". The 403 subjects were the ones who were actually screened for diabetes. Glycosolated hemoglobin > 7.0 is usually taken as a positive diagnosis of diabetes. For more information about this study see
+
+
+
+```{r,message=FALSE,eval=TRUE}
+
+#load data
+library(Hmisc)
+getHdata("diabetes")
+
+head(diabetes)
+
+contents(diabetes)
+
+```
+
+
+
+
+
+
+**Question**: Is Glycosolated hemoglobin (glyhb) associated with waist/hip ratio (waist/hip) and other factors including age and gender?
+
+### Exercise 1: Data visualization
+
+Use some pictures (histogram, scatter plot, or box plot,...) to show the distribution of all factors;
+Think about:
+(1) Assess the data assumptions (Normality and Linearity) for linear regression;
+(2) Based on (1), do you think we need to perform a log transformation on nc1 and nc2?
+(3) What is the relationships between nc1, nc2, age, and organ;
+
+```{r}
+
+diabetes$waisthipRatio=diabetes$waist/diabetes$hip
+
+
+plot(diabetes[,c("glyhb","waisthipRatio","age")])
+
+boxplot(diabetes$glyhb~diabetes$gender)
+boxplot(diabetes$waisthipRatio~diabetes$gender)
+
+```
+
+
+### Exercise 2: Perform simple linear regression analysis
+
+Using glyhb as Y, waisthipRatio as X
+
+```{r}
+
+modelResult <- lm(glyhb ~ waisthipRatio, data = diabetes)
+
+```
+
+
+### Exercise 3: Model interpretation
+
+(1) Is waisthipRatio significantly associated with glyhb? What is the coefficient of waisthipRatio? What does it mean? 
+(2) Use a scatter plot to show the waisthipRatio in X axis, and glyhb in Y axis. Add the fitted regression line. 
+(3) Make residual plot to assess the Homoscedasticity assumption.
+
+```{r}
+
+summary(modelResult)
+
+plot(glyhb ~waisthipRatio, data =diabetes,main = "glyhb Regression by waisthipRatio")
+abline(modelResult,lty=2,col="red")
+
+plot(fitted(modelResult),residuals(modelResult))
+
+```
+
+
+
+### Exercise 4: Perform multiple linear regression analysis
+
+Using glyhb as Y; waisthipRatio, age, and gender as X
+
+```{r}
+
+modelResult <- lm(glyhb ~ waisthipRatio+age+gender, data = diabetes)
+summary(modelResult)
+
+```
+
+
+### Exercise 5: Use the model to predict the glyhb value for a new subject.
+
+```{r}
+
+newData <- data.frame(age = c(Subject1=3,Subject2=4),waisthipRatio=c(0.7,1.1),gender=c("male","female"))
+predict(modelResult,newdata = newData)
+
+```
+
+
+
+

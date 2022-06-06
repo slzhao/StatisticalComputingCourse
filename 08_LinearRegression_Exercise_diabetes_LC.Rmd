@@ -1,0 +1,130 @@
+---
+title: "Linear Regression Exercises"
+output:
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_depth: 3
+    number_sections: false
+    toc_float: 
+       collapsed: true
+    #code_folding: hide
+---
+
+```{=html}
+<style>
+h2 {
+  background-color: #D4DAEC;
+}
+</style>
+```
+
+```{r setup,echo=FALSE}
+
+knitr::opts_chunk$set(echo = FALSE,eval=FALSE)
+
+```
+
+
+
+## Exercise
+
+-   Check model assumptions
+-   Perform linear regression analysis
+-   Model evaluation and discuss the results
+
+
+## Data
+
+The data consist of 19 variables on 403 subjects from 1046 subjects who were interviewed in a study to understand the prevalence of obesity, diabetes, and other cardiovascular risk factors in  African Americans. Diabetes Mellitus Type II (DM II, adult onset diabetes) is known to be strongly associated with obesity. The waist/hip ratio may be a predictor in diabetes and heart disease. The 403 subjects were screened for diabetes. Glycosylated hemoglobin (HbA1c) > 7.0 is usually considered as a positive diagnosis of diabetes.  
+
+For more information about this data see:
+https://hbiostat.org/data/repo/diabetes.html
+
+
+```{r,message=FALSE,eval=FALSE,echo=TRUE}
+
+#load data
+library(Hmisc)
+getHdata("diabetes")
+
+head(diabetes)
+
+contents(diabetes)
+
+#get waist/hip ratio
+diabetes$waisthipRatio=diabetes$waist/diabetes$hip
+
+```
+
+
+**Question**: Is HbA1c (`glyhb`) associated with waist/hip ratio (`waisthipRatio`) and other factors including age and gender?
+
+## Exercise 1: Data visualization
+
+Use plots (histogram, scatter plot, or box plot, etc.) to  explore data.
+Based on the plots, assess the data assumptions (Normality and Linearity) for linear regression.
+
+
+```{r}
+
+plot(diabetes[,c("glyhb","waisthipRatio","age")])
+
+boxplot(diabetes$glyhb~diabetes$gender)
+boxplot(diabetes$waisthipRatio~diabetes$gender)
+
+```
+
+
+## Exercise 2: Perform simple linear regression analysis
+
+Using glyhb as Y, waisthipRatio as X
+
+```{r}
+
+modelResult <- lm(glyhb ~ waisthipRatio, data = diabetes)
+
+```
+
+
+## Exercise 3: Interpretation of results
+
+(1) Is waisthipRatio significantly associated with glyhb? What is the coefficient of waisthipRatio? What does it mean? 
+(2) Use a scatter plot to show the waisthipRatio in X axis, and glyhb in Y axis. Add the fitted regression line. 
+(3) Make residual plot to check model assumptions.
+
+```{r}
+
+summary(modelResult)
+
+plot(glyhb ~ waisthipRatio, data = diabetes, main = "")
+abline(modelResult,lty=2,col="red")
+
+plot(fitted(modelResult),residuals(modelResult))
+
+```
+
+
+## Exercise 4: Perform multiple linear regression analysis
+
+Using glyhb as Y; waisthipRatio, age, and gender as X
+
+```{r}
+
+modelResult <- lm(glyhb ~ waisthipRatio + age + gender, data = diabetes)
+summary(modelResult)
+
+```
+
+
+## Exercise 5: Use the model to predict the glyhb value for a new subject.
+
+```{r}
+
+newData <- data.frame(age = c(Subject1=3,Subject2=4),waisthipRatio=c(0.7,1.1),gender=c("male","female"))
+predict(modelResult,newdata = newData)
+
+```
+
+
+
