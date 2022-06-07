@@ -26,7 +26,7 @@ body{
 
 ```{r setup,echo=FALSE}
 
-knitr::opts_chunk$set(echo = FALSE,eval=FALSE)
+knitr::opts_chunk$set(echo = TRUE,eval=TRUE)
 
 
 ```
@@ -40,34 +40,29 @@ knitr::opts_chunk$set(echo = FALSE,eval=FALSE)
 -   Model evaluation
 
 
-Goal: association between survival (survived==1) and age (age).
-
-
-```{r,message=FALSE,echo=TRUE}
+```{r,message=FALSE,echo=TRUE,eval=TRUE}
 
 #Get Titanic data
 library(Hmisc)
 getHdata(titanic3)
 head(titanic3)
 
-dataForAnalysis=titanic3
 
 ```
 
-**Question**: Is survival (survived==1) associated with age, sex and ticket fare (fare)?
+**Question**: Is survival (survived=1) associated with age, sex and ticket class (pclass)?
 
-### Exercise 1: Data visulization for survival, age, sex and fare
+### Exercise 1: Data visualization for survival, age, sex and pclass
 
 
 ```{r}
 
-table(dataForAnalysis$survived,dataForAnalysis$sex)
+table(titanic3$survived,titanic3$sex)
 
-tapply(dataForAnalysis$age,dataForAnalysis$survived,summary)
-boxplot(dataForAnalysis$age~dataForAnalysis$survived)
+table(titanic3$survived,titanic3$pclass)
 
-tapply(dataForAnalysis$fare,dataForAnalysis$survived,summary)
-boxplot(dataForAnalysis$fare~dataForAnalysis$survived)
+tapply(titanic3$age,titanic3$survived,summary)
+boxplot(titanic3$age~titanic3$survived)
 
 
 ```
@@ -75,11 +70,11 @@ boxplot(dataForAnalysis$fare~dataForAnalysis$survived)
 
 ### Exercise 2: Perform logistic regression analysis
 
-survived ~ age+fare+sex
+survived ~ age+pclass+sex
 
 ```{r}
 
-modelResult <- glm(survived ~ age+fare+sex, data = dataForAnalysis,family = "binomial")
+modelResult <- glm(survived ~ age+pclass+sex, data = titanic3,family = "binomial")
 summary(modelResult)
 
 
@@ -89,13 +84,12 @@ summary(modelResult)
 
 ```{r}
 
-summary(modelResult)
 confint(modelResult)
 
 ```
 
 
-### Exercise 4: Report Odds ratio for each variable
+### Exercise 4: Report odds ratio for each variable
 
 
 ```{r}
@@ -108,10 +102,10 @@ exp(modelResult$coefficients)
 
 ### Exercise 5: Show effect of each variable
 
-```{r}
+```{r,message=FALSE}
 
 library(effects)
-allEffects(modelResult)
+#allEffects(modelResult)
 plot(allEffects(modelResult))
 
 

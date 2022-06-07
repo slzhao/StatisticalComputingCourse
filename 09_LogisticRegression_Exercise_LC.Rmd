@@ -1,0 +1,109 @@
+---
+title: "Logistic Regression Exercises"
+output:
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_depth: 3
+    number_sections: false
+    toc_float: 
+       collapsed: true
+    #code_folding: hide
+---
+
+```{=html}
+<style>
+h2 {
+  background-color: #D4DAEC;
+}
+body{
+  font-size: 14pt;
+}
+</style>
+```
+
+
+
+```{r setup,echo=FALSE}
+
+knitr::opts_chunk$set(echo = FALSE, eval=FALSE)
+
+
+```
+
+
+
+## Exercise
+
+-   Exploratory data analysis
+-   Perform logistic regression analysis
+-   Interpretation  of the results
+
+### Example data
+
+```{r,message=FALSE, echo=TRUE, eval=TRUE}
+
+#Get Titanic data
+library(Hmisc)
+getHdata(titanic3)
+head(titanic3)
+label(titanic3$survived) <- 'survived (1 = Yes, 2 = No)'
+# titanic3$survived=ifelse(titanic3$survived==1,"Yes", "No")
+
+```
+
+**Question**: Is the probability of being survival associated with age, sex and, ticket class (`pclass`)?
+
+### Exercise 1: Exploratory data analysis - understanding the data
+
+```{r}
+
+(tt1 <- table(titanic3$survived, titanic3$sex))
+rowsum1 <- apply(tt1, 1, sum)
+tt1[1,]/rowsum1[1]
+tt1[2,]/rowsum1[2]
+
+(tt2 <- table(titanic3$survived, titanic3$pclass))
+rowsum2 <- apply(tt2, 1, sum)
+tt2[1,]/rowsum2[1]
+tt2[2,]/rowsum2[2]
+
+tapply(titanic3$age, titanic3$survived, summary)
+
+boxplot(titanic3$age ~ titanic3$survived, main="", ylab="Age", xlab="Survived")
+
+```
+
+
+### Exercise 2: Perform logistic regression analysis and interpretation of results 
+
+survived ~ age + pclass + sex
+
+```{r}
+
+modelResult <- glm(survived ~ age + pclass + sex, data = titanic3, family = "binomial")
+summary(modelResult)
+
+confint(modelResult)
+
+#Odds ratio
+exp(modelResult$coefficients)
+
+```
+
+### Exercise 3: Effects of each variable
+
+```{r,message=FALSE}
+
+library(effects)
+plot(allEffects(modelResult))
+
+
+```
+
+
+
+
+
+
+
