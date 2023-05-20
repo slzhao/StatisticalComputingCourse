@@ -18,7 +18,6 @@ h2 {
 }
 </style>
 ```
-
 ```{r setup,echo=FALSE}
 
 knitr::opts_chunk$set(echo = TRUE,eval=TRUE)
@@ -26,14 +25,11 @@ knitr::opts_chunk$set(echo = TRUE,eval=TRUE)
 
 ```
 
-
-
 ## Exercise
 
 -   Data assumptions: show data distribution and discuss about Normality and Linearity
 -   Perform the linear regression analysis
 -   Model evaluation: discuss model result
-
 
 ## Data
 
@@ -52,10 +48,12 @@ head(dataForAnalysis)
 
 ### Exercise 1: Data visualization
 
-Use some pictures (histogram, scatter plot, or box plot,...) to show the distribution of all factors (nc2, nc1, age, and organ);
-Think about:
+Use some pictures (histogram, scatter plot, or box plot,...) to show the distribution of all factors (nc2, nc1, age, and organ); Think about:
+
 (1) Assess the data assumptions (Normality and Linearity) for linear regression;
+
 (2) Based on (1), do you think we need to perform a log transformation on nc1 and nc2?
+
 (3) What is the relationships between nc1, nc2, age, and organ;
 
 ```{r}
@@ -70,7 +68,6 @@ boxplot(dataForAnalysis$age~dataForAnalysis$organ)
 
 ```
 
-
 ### Exercise 2: Perform simple linear regression analysis
 
 Using nc2 as Y, nc1 as X
@@ -81,11 +78,10 @@ modelResult <- lm(log(nc2) ~ log(nc1), data = dataForAnalysis)
 
 ```
 
-
 ### Exercise 3: Model interpretation
 
-(1) Is nc1 significantly associated with nc2? What is the coefficient of nc1? What does it mean? 
-(2) Use a scatter plot to show the nc1 in X axis, and nc2 in Y axis. Add the fitted regression line. 
+(1) Is nc1 significantly associated with nc2? What is the coefficient of nc1? What does it mean?
+(2) Use a scatter plot to show the nc1 in X axis, and nc2 in Y axis. Add the fitted regression line.
 (3) Make residual plot to assess the Homoscedasticity assumption.
 
 ```{r}
@@ -99,8 +95,6 @@ plot(fitted(modelResult),residuals(modelResult))
 
 ```
 
-
-
 ### Exercise 4: Perform multiple linear regression analysis
 
 Using nc2 as Y; nc1, age, and organ as X
@@ -111,7 +105,6 @@ modelResult <- lm(log(nc2) ~ log(nc1)+age+organ, data = dataForAnalysis)
 
 ```
 
-
 ### Exercise 5: Use the model to predict the nc2 value for a new subject.
 
 ```{r}
@@ -120,7 +113,3 @@ newData <- data.frame(age = c(Subject1=3,Subject2=4),nc1=c(0.126,0.153),organ=fa
 predict(modelResult,newdata = newData)
 
 ```
-
-
-
-

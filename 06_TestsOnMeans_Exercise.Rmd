@@ -110,7 +110,7 @@ wilcox.test(dataForAnalysis$age,30)
 
 ## Comparing the means of two independent groups
 
-**Question**: Is there any age difference between suviviors and non-suviviors?
+**Question**: Is there any age difference between survivors and non-survivors?
 
 
 ### Exercise 1: Testing by **two-sample t-test**

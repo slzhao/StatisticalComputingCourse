@@ -1,16 +1,9 @@
 ---
 title: "Tests on mean values"
 output:
-  html_document:
-    theme: cerulean
-    toc: yes
-    toc_depth: 3
+  rmdformats::robobook:
+    highlight: kate
     number_sections: no
-    toc_float:
-      collapsed: yes
-  pdf_document:
-    toc: yes
-    toc_depth: '3'
 editor_options:
   markdown:
     wrap: 72
